@@ -1,0 +1,28 @@
+name: dev
+
+on:
+  workflow_dispatch:
+
+permissions: write-all
+
+concurrency:
+  group: dev
+  cancel-in-progress: true
+
+jobs:
+  fetch-subcribe-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: dongchengjie/proxies-health-check@main
+        with:
+          proxies-config-urls: |
+            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/SFZY666.yaml
+            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/aiboboxx.yaml
+          timeout: 2000
+          proxies: custom_folder/custom_file.yaml
+
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "ci: dev"

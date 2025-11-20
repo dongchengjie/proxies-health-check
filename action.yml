@@ -1,0 +1,47 @@
+name: proxies-health-check
+description: Check the health of proxies provided via configuration URLs.
+
+inputs:
+  proxies-config-urls:
+    description: Proxies configuration URLs
+    required: true
+  segment-size:
+    description: Segment size for health check
+    required: false
+    default: "100"
+  concurrency:
+    description: Number of concurrent health check requests
+    required: false
+    default: ""
+  test-url:
+    description: URL used for health check
+    required: false
+    default: "https://www.google.com/generate_204"
+  timeout:
+    description: Timeout for each health check request in milliseconds
+    required: false
+    default: "1500"
+  excluded-proxies-config-urls:
+    description: Proxies configuration URLs to be excluded
+    required: false
+    default: ""
+  max-excluded-times:
+    description: Maximum number of times a proxy can be excluded before being removed from the output
+    required: false
+    default: "3"
+  qualified:
+    description: Output file path for qualified proxies
+    required: false
+    default: "qualified.yaml"
+  excluded:
+    description: Output file path for excluded proxies
+    required: false
+    default: "excluded.yaml"
+  statistics:
+    description: Output file path for statistics
+    required: false
+    default: "statistics.md"
+
+runs:
+  using: docker
+  image: Dockerfile

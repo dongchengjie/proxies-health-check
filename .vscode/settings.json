@@ -1,0 +1,15 @@
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    ".gitignore": ".git*,tsconfig.*.json",
+    "Dockerfile": "Dockerfile,docker-entrypoint.sh,.dockerignore",
+    "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,bun.lockb",
+    "qualified.yaml": "qualified.yaml,excluded.yaml,statistics.md"
+  },
+  "search.exclude": {
+    "dist": true
+  },
+  "i18n-ally.localesPaths": ["locales"],
+  "i18n-ally.keystyle": "nested"
+}
