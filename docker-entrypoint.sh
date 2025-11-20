@@ -10,5 +10,7 @@ bun run ./services/mihomo.ts
 # Start health check
 bun run index.ts
 
-#hang
-tail -f /dev/null
+# Keep the container running in dev mode
+if [ "$NODE_ENV" = "dev" ]; then
+  tail -f /dev/null
+fi

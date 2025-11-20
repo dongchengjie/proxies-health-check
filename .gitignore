@@ -2,3 +2,4 @@ node_modules/
 qualified.yaml
 excluded.yaml
 statistics.md
+.env*

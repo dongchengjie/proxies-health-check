@@ -2,10 +2,10 @@ name: proxies-health-check
 description: Check the health of proxies provided via configuration URLs.
 
 inputs:
-  proxies-config-urls:
+  proxies_config_urls:
     description: Proxies configuration URLs
     required: true
-  segment-size:
+  segment_size:
     description: Segment size for health check
     required: false
     default: "100"
@@ -13,7 +13,7 @@ inputs:
     description: Number of concurrent health check requests
     required: false
     default: ""
-  test-url:
+  test_url:
     description: URL used for health check
     required: false
     default: "https://www.google.com/generate_204"
@@ -21,11 +21,11 @@ inputs:
     description: Timeout for each health check request in milliseconds
     required: false
     default: "1500"
-  excluded-proxies-config-urls:
+  excluded_proxies_config_urls:
     description: Proxies configuration URLs to be excluded
     required: false
     default: ""
-  max-excluded-times:
+  max_excluded_times:
     description: Maximum number of times a proxy can be excluded before being removed from the output
     required: false
     default: "3"

@@ -6,7 +6,7 @@ const EXCLUDED_TIMES_KEY = "_excluded_times";
 
 export const getExcludedProxies = async () => {
   try {
-    const urls = inputs["excluded-proxies-config-urls"].filter(Boolean);
+    const urls = inputs["excluded_proxies_config_urls"].filter(Boolean);
     if (urls.length === 0) return [];
 
     return await downloadSubscriptionCollection(urls, "JSON");
@@ -16,7 +16,7 @@ export const getExcludedProxies = async () => {
 };
 
 export const shouldExcludeProxy = (proxy: any, excluded: any[] = []) => {
-  const times = inputs["max-excluded-times"];
+  const times = inputs["max_excluded_times"];
   if (proxy[EXCLUDED_TIMES_KEY] && proxy[EXCLUDED_TIMES_KEY] >= times) {
     return true;
   }

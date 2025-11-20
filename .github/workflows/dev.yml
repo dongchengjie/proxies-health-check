@@ -10,18 +10,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fetch-subcribe-files:
+  proxies-health-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
 
       - uses: dongchengjie/proxies-health-check@main
         with:
-          proxies-config-urls: |
+          proxies_config_urls: |
+            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/Pawdroid.yaml
             https://raw.githubusercontent.com/dongchengjie/airport/main/subs/SFZY666.yaml
-            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/aiboboxx.yaml
-          timeout: 2000
-          proxies: custom_folder/custom_file.yaml
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:

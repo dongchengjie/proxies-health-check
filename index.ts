@@ -10,7 +10,7 @@ import {
 } from "./src/output";
 
 // Download proxies configuration
-const urls = inputs["proxies-config-urls"].filter(Boolean);
+const urls = inputs["proxies_config_urls"].filter(Boolean);
 const yaml = await downloadSubscriptionCollection(urls);
 
 // Parse proxies configuration
