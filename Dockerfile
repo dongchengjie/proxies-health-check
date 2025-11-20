@@ -1,5 +1,5 @@
 # Use the official Bun image
-FROM oven/bun:latest AS base
+FROM oven/bun:1.3 AS base
 WORKDIR /usr/src/app
 
 FROM base AS install
@@ -13,10 +13,10 @@ ADD https://github.com/sub-store-org/Sub-Store/releases/download/2.20.39/sub-sto
 ADD https://github.com/MetaCubeX/mihomo/releases/download/v1.19.16/mihomo-linux-amd64-compatible-v1.19.16.gz mihomo.gz
 RUN gunzip mihomo.gz && chmod +x mihomo
 # Install GEOX
-ADD https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat GeoIP.dat
-ADD https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb Country.mmdb
-ADD https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb ASN.mmdb
-ADD https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat GeoSite.dat
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat GeoIP.dat
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb Country.mmdb
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb ASN.mmdb
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat GeoSite.dat
 
 FROM base AS action
 COPY --from=install /temp/bun/node_modules node_modules
