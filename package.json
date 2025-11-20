@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run ./index.ts",
-    "build": "docker build --pull --rm -f Dockerfile -t proxies-health-check:latest .",
-    "serve": "docker run -it --rm -e NODE_ENV=dev -p 3000:3000 -p 9090:9090 proxies-health-check:latest"
+    "build": "docker build --pull --rm -t proxies-health-check .",
+    "serve": "docker run -it --rm -e NODE_ENV=dev -p 3000:3000 -p 9090:9090 proxies-health-check"
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",

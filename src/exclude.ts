@@ -9,7 +9,11 @@ export const getExcludedProxies = async () => {
     const urls = inputs["excluded_proxies_config_urls"].filter(Boolean);
     if (urls.length === 0) return [];
 
-    return await downloadSubscriptionCollection(urls, "JSON");
+    const excludedProxies = await downloadSubscriptionCollection(urls, "JSON");
+    for (const proxy of excludedProxies) {
+      proxy[EXCLUDED_TIMES_KEY] = proxy[EXCLUDED_TIMES_KEY] || 1;
+    }
+    return excludedProxies;
   } catch {
     return [];
   }
@@ -34,5 +38,5 @@ export const markProxyAsExcluded = (proxy: any, excluded: any[] = []) => {
   if (!excluded.find((item) => uniqueKey(item) === uniqueKey(proxy))) {
     excluded.push(proxy);
   }
-  proxy[EXCLUDED_TIMES_KEY] = (proxy[EXCLUDED_TIMES_KEY] || 0) + 1;
+  proxy[EXCLUDED_TIMES_KEY] = (proxy[EXCLUDED_TIMES_KEY] || 1) + 1;
 };
