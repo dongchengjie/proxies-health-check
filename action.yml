@@ -37,10 +37,6 @@ inputs:
     description: Output file path for excluded proxies
     required: false
     default: "excluded.yaml"
-  statistics:
-    description: Output file path for statistics
-    required: false
-    default: "statistics.md"
 
 runs:
   using: docker

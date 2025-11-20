@@ -29,4 +29,3 @@ jobs:
 | max_excluded_times           | Maximum number of times a proxy can be excluded before being removed from the output | 3                                   |
 | qualified                    | Output file path for qualified proxies                                               | $pwd/qualified.yaml                 |
 | excluded                     | Output file path for excluded proxies                                                | $pwd/excluded.yaml                  |
-| statistics                   | Output file path for statistics                                                      | $pwd/statistics.md                  |

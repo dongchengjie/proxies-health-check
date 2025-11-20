@@ -16,7 +16,6 @@ export const uniqueKey = (proxy: any) =>
 export const proxiesHealthCheck = async (proxies: any[]) => {
   const qualifiedProxies: any[] = [];
   const excludedProxies: any[] = [];
-  const statistics = [];
 
   // Download excluded proxies configuration
   core.info("🔍 Parsing excluded proxies...");
@@ -54,10 +53,12 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
       const delays = (await Promise.all(requests))
         .filter((item) => item.delay > 0)
         .reduce((acc, cur) => {
-          acc[uniqueKey(cur.proxy)] = cur.delay;
+          acc[uniqueKey(cur.proxy)] = {
+            proxy: cur.proxy,
+            delay: cur.delay,
+          };
           return acc;
-        }, {} as Record<any, number>);
-      statistics.push(delays);
+        }, {} as Record<string, any>);
 
       // Exclude unqualified proxies
       for (const proxy of segment) {
@@ -80,5 +81,5 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
   }
   core.info("✅ Health checks completed.");
 
-  return { qualifiedProxies, excludedProxies, statistics };
+  return { qualifiedProxies, excludedProxies };
 };

@@ -5,7 +5,7 @@
     ".gitignore": ".git*,tsconfig.*.json",
     "Dockerfile": "Dockerfile,docker-entrypoint.sh,.dockerignore",
     "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,bun.lockb",
-    "qualified.yaml": "qualified.yaml,excluded.yaml,statistics.md"
+    "qualified.yaml": "qualified.yaml,excluded.yaml"
   },
   "search.exclude": {
     "dist": true

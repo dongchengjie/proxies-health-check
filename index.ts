@@ -3,11 +3,7 @@ import { downloadSubscriptionCollection } from "./src/subscription";
 import { inputs } from "./src/actions/input";
 import { parse } from "yaml";
 import { proxiesHealthCheck } from "./src/health-check";
-import {
-  outputQualifiedProxies,
-  outputExcludedProxies,
-  outputStatistics,
-} from "./src/output";
+import { outputQualifiedProxies, outputExcludedProxies } from "./src/output";
 
 // Download proxies configuration
 const urls = inputs["proxies_config_urls"].filter(Boolean);
@@ -20,9 +16,8 @@ core.info(`✅ Parsed ${proxies.length} proxies.`);
 
 // Perform health check
 const healthCheckResult = await proxiesHealthCheck(proxies);
-const { qualifiedProxies, excludedProxies, statistics } = healthCheckResult;
+const { qualifiedProxies, excludedProxies } = healthCheckResult;
 
 // Output results
 outputQualifiedProxies(qualifiedProxies);
 outputExcludedProxies(excludedProxies);
-outputStatistics(statistics);

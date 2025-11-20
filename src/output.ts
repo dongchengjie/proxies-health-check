@@ -9,7 +9,13 @@ const workspace = process.env["GITHUB_WORKSPACE"] ? "/github/workspace" : "";
 export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
   if (qualifiedProxies.length > 0) {
     const qualifiedFile = path.resolve(workspace, inputs["qualified"]);
-    fs.outputFileSync(qualifiedFile, stringify({ proxies: qualifiedProxies }));
+    fs.outputFileSync(
+      qualifiedFile,
+      stringify({
+        mode: "rule",
+        proxies: qualifiedProxies,
+      })
+    );
     core.info(`✅ Output ${qualifiedProxies.length} qualified proxies.`);
   } else {
     core.warning("⚠️ No qualified proxies found.");
@@ -23,14 +29,5 @@ export const outputExcludedProxies = (excludedProxies: any[]) => {
     core.info(`✅ Output ${excludedProxies.length} excluded proxies.`);
   } else {
     core.warning("⚠️ No excluded proxies found.");
-  }
-};
-
-export const outputStatistics = (statistics: any[]) => {
-  if (statistics.length > 0) {
-    const statisticsFile = path.resolve(workspace, inputs["statistics"]);
-    // TODO: output statistics in markdown format
-    fs.outputFileSync(statisticsFile, JSON.stringify(statistics, null, 2));
-    core.info("✅ Output statistics.");
   }
 };

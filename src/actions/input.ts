@@ -17,7 +17,6 @@ export const inputs = {
   max_excluded_times: Number(core.getInput("max_excluded_times") || "3"),
   qualified: core.getInput("qualified") || "qualified.yaml",
   excluded: core.getInput("excluded") || "excluded.yaml",
-  statistics: core.getInput("statistics") || "statistics.md",
 };
 
 core.info(JSON.stringify(inputs, null, 2));
