@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import axios from "axios";
+import { setSettings } from "../src/apis/sub-store";
 
 const SUB_STORE_PORT = process.env.SUB_STORE_BACKEND_API_PORT || 3000;
 const HEALTH_CHECK_URL = `http://127.0.0.1:${SUB_STORE_PORT}/`;
@@ -100,6 +101,9 @@ const main = async () => {
     await waitForBackend();
 
     console.log(`✅ Sub-Store backend is ready at ${HEALTH_CHECK_URL}`);
+
+    // Configure Sub-Store settings
+    await setSettings({ cacheThreshold: "20480", defaultTimeout: "30000" });
 
     process.exit(0);
   } catch (error: any) {

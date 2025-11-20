@@ -2,6 +2,15 @@ import axios from "axios";
 
 const SUB_STORE_PORT = process.env.SUB_STORE_BACKEND_API_PORT || 3000;
 
+export const setSettings = (settings: Record<string, any>) => {
+  return axios.request({
+    url: `http://127.0.0.1:${SUB_STORE_PORT}/api/settings`,
+    method: "patch",
+    data: settings,
+    timeout: 3 * 1000,
+  });
+};
+
 export const addSub = (sub: string, url: string) => {
   return axios.request({
     url: `http://127.0.0.1:${SUB_STORE_PORT}/api/subs`,
