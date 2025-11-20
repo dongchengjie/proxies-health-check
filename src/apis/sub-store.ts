@@ -12,6 +12,7 @@ export const setSettings = (settings: Record<string, any>) => {
 };
 
 export const addSub = (sub: string, url: string) => {
+  url = `${url.trim()}#noFlow`;
   return axios.request({
     url: `http://127.0.0.1:${SUB_STORE_PORT}/api/subs`,
     method: "post",

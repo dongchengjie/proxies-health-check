@@ -71,7 +71,7 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
       }
 
       core.info(
-        `✅ Segment [${start}-${end}/${proxies.length}] health check completed.`
+        `✅ Segment [${start}-${end}/${qualifiedProxies.length}:${proxies.length}] health check completed.`
       );
     } catch (error) {
       core.error(
