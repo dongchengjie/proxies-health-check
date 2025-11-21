@@ -47,5 +47,5 @@ export const markProxyAsExcluded = (proxy: any, excluded: any[] = []) => {
   if (!excluded.find((item) => uniqueKey(item) === uniqueKey(proxy))) {
     excluded.push(proxy);
   }
-  proxy[EXCLUDED_TIMES_KEY] = (proxy[EXCLUDED_TIMES_KEY] || 1) + 1;
+  proxy[EXCLUDED_TIMES_KEY] = (proxy[EXCLUDED_TIMES_KEY] || 0) + 1;
 };
