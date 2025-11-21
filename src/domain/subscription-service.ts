@@ -29,7 +29,7 @@ export class SubscriptionService {
       return [];
     }
 
-    const yaml = await this.downloadSubscriptionCollection(filteredUrls);
+    const yaml = await this.downloadSubscriptionCollection(filteredUrls, "ClashMeta");
     
     this.logger.info("🔍 Parsing proxies...");
     const parsed = parse(yaml);
@@ -51,6 +51,7 @@ export class SubscriptionService {
 
     try {
       const data = await this.downloadSubscriptionCollection(filteredUrls, "JSON");
+      // When target is JSON, response should be an array
       return Array.isArray(data) ? data : [];
     } catch {
       return [];
@@ -58,12 +59,28 @@ export class SubscriptionService {
   }
 
   /**
+   * Download a collection of subscriptions as YAML
+   */
+  private async downloadSubscriptionCollection(
+    urls: string[],
+    target: "ClashMeta"
+  ): Promise<string>;
+  
+  /**
+   * Download a collection of subscriptions as JSON
+   */
+  private async downloadSubscriptionCollection(
+    urls: string[],
+    target: "JSON"
+  ): Promise<unknown[]>;
+  
+  /**
    * Download a collection of subscriptions
    */
   private async downloadSubscriptionCollection(
     urls: string[],
     target: string = "ClashMeta"
-  ): Promise<any> {
+  ): Promise<string | unknown[]> {
     // Register individual subscriptions
     const subscriptions = urls.map((url) => ({
       name: nanoid(),

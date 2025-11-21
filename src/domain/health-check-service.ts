@@ -75,6 +75,7 @@ export class HealthCheckService {
   ): Promise<void> {
     const { start, end, total } = position;
     const { concurrency, testUrl, timeout } = config;
+    const segmentStartCount = qualifiedProxies.length;
 
     try {
       this.logger.info(
@@ -118,8 +119,9 @@ export class HealthCheckService {
         }
       }
 
+      const segmentQualifiedCount = qualifiedProxies.length - segmentStartCount;
       this.logger.info(
-        `✅ Segment [${start + 1}-${end}/${qualifiedProxies.length}:${total}] health check completed.`
+        `✅ Segment [${start + 1}-${end}] completed: ${segmentQualifiedCount} qualified, ${qualifiedProxies.length} total qualified out of ${total}`
       );
     } catch (error) {
       this.logger.error(

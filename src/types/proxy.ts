@@ -7,7 +7,9 @@ export interface Proxy {
   name: string;
   server: string;
   port: number;
-  [key: string]: any; // Additional proxy-specific fields
+  // Additional proxy-specific fields vary by type
+  // Using unknown for type safety - cast when needed
+  [key: string]: unknown;
 }
 
 export interface ProxyWithMetadata extends Proxy {
