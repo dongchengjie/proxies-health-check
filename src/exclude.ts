@@ -4,16 +4,25 @@ import { downloadSubscriptionCollection } from "./subscription";
 
 const EXCLUDED_TIMES_KEY = "_excluded_times";
 
+export const simplifyExcludedProxy = (proxy: any) => {
+  return {
+    type: proxy.type,
+    server: proxy.server,
+    port: proxy.port,
+    [EXCLUDED_TIMES_KEY]: proxy[EXCLUDED_TIMES_KEY],
+  };
+};
+
 export const getExcludedProxies = async () => {
   try {
     const urls = inputs["excluded_proxies_config_urls"].filter(Boolean);
     if (urls.length === 0) return [];
 
     const excludedProxies = await downloadSubscriptionCollection(urls, "JSON");
-    for (const proxy of excludedProxies) {
-      proxy[EXCLUDED_TIMES_KEY] = proxy[EXCLUDED_TIMES_KEY] || 1;
-    }
-    return excludedProxies;
+    return excludedProxies.map((proxy: any) => ({
+      ...simplifyExcludedProxy(proxy),
+      [EXCLUDED_TIMES_KEY]: proxy[EXCLUDED_TIMES_KEY] || 1,
+    }));
   } catch {
     return [];
   }
