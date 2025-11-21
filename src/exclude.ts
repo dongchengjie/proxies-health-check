@@ -34,7 +34,10 @@ export const shouldExcludeProxy = (proxy: any, excluded: any[] = []) => {
     return true;
   }
 
-  return excluded.find((item) => uniqueKey(item) === uniqueKey(proxy))
+  return excluded.find(
+    (item) =>
+      uniqueKey(item) === uniqueKey(proxy) && item[EXCLUDED_TIMES_KEY] >= times
+  )
     ? true
     : false;
 };
