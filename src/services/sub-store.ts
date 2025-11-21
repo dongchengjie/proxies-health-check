@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import axios from "axios";
-import { setSettings } from "../src/apis/sub-store";
+import { setSettings } from "../apis/sub-store";
 
 const SUB_STORE_PORT = process.env.SUB_STORE_BACKEND_API_PORT || 3000;
 const HEALTH_CHECK_URL = `http://127.0.0.1:${SUB_STORE_PORT}/`;
