@@ -22,12 +22,6 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
   excludedProxies.push(...(await getExcludedProxies()));
   core.info(`✅ Parsed ${excludedProxies.length} excluded proxies.`);
 
-  // Create a Map for O(1) excluded proxy lookups
-  const excludedMap = new Map<string, any>();
-  for (const proxy of excludedProxies) {
-    excludedMap.set(uniqueKey(proxy), proxy);
-  }
-
   const segmentSize = inputs["segment_size"];
   for (let i = 0; i < proxies.length; i += segmentSize) {
     const limit = pLimit(inputs["concurrency"]);
@@ -71,13 +65,9 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
         const key = uniqueKey(proxy);
         if (delays[key] !== undefined) {
           markProxyAsNotExcluded(proxy, excludedProxies);
-          // Update Map when proxy is no longer excluded
-          excludedMap.delete(key);
           qualifiedProxies.push(proxy);
         } else {
           markProxyAsExcluded(proxy, excludedProxies);
-          // Update Map when proxy is excluded
-          excludedMap.set(key, proxy);
         }
       }
 
