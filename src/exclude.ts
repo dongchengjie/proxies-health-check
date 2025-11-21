@@ -39,8 +39,14 @@ export const shouldExcludeProxy = (proxy: any, excluded: any[] = []) => {
     : false;
 };
 
-export const markProxyAsNotExcluded = (proxy: any) => {
-  if (proxy[EXCLUDED_TIMES_KEY]) delete proxy[EXCLUDED_TIMES_KEY];
+export const markProxyAsNotExcluded = (proxy: any, excluded: any[] = []) => {
+  const idx = excluded.findIndex(
+    (item) => uniqueKey(item) === uniqueKey(proxy)
+  );
+  if (idx !== -1) {
+    excluded.splice(idx, 1);
+  }
+  delete proxy[EXCLUDED_TIMES_KEY];
 };
 
 export const markProxyAsExcluded = (proxy: any, excluded: any[] = []) => {

@@ -63,7 +63,7 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
       // Exclude unqualified proxies
       for (const proxy of segment) {
         if (delays[uniqueKey(proxy)] !== undefined) {
-          markProxyAsNotExcluded(proxy);
+          markProxyAsNotExcluded(proxy, excludedProxies);
           qualifiedProxies.push(proxy);
         } else {
           markProxyAsExcluded(proxy, excludedProxies);
