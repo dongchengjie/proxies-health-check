@@ -25,12 +25,14 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
   const segmentSize = inputs["segment_size"];
   for (let i = 0; i < proxies.length; i += segmentSize) {
     const limit = pLimit(inputs["concurrency"]);
-    const [start, end] = [i + 1, Math.min(i + segmentSize, proxies.length)];
+    const [start, end] = [i, Math.min(i + segmentSize - 1, proxies.length)];
     const segment = proxies.slice(start, end);
 
     try {
       core.info(
-        `🔄 Patching configuration for segment [${start}-${end}/${proxies.length}]...`
+        `🔄 Patching configuration for segment [${start + 1}-${end + 1}/${
+          proxies.length
+        }]...`
       );
       await updateConfig(stringify({ proxies: segment }));
 
@@ -71,7 +73,9 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
       }
 
       core.info(
-        `✅ Segment [${start}-${end}/${qualifiedProxies.length}:${proxies.length}] health check completed.`
+        `✅ Segment [${start + 1}-${end + 1}/${qualifiedProxies.length}:${
+          proxies.length
+        }] health check completed.`
       );
     } catch (error) {
       core.error(
