@@ -22,15 +22,21 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
   excludedProxies.push(...(await getExcludedProxies()));
   core.info(`✅ Parsed ${excludedProxies.length} excluded proxies.`);
 
+  // Create a Map for O(1) excluded proxy lookups
+  const excludedMap = new Map<string, any>();
+  for (const proxy of excludedProxies) {
+    excludedMap.set(uniqueKey(proxy), proxy);
+  }
+
   const segmentSize = inputs["segment_size"];
   for (let i = 0; i < proxies.length; i += segmentSize) {
     const limit = pLimit(inputs["concurrency"]);
-    const [start, end] = [i + 1, Math.min(i + segmentSize, proxies.length)];
+    const [start, end] = [i, Math.min(i + segmentSize, proxies.length)];
     const segment = proxies.slice(start, end);
 
     try {
       core.info(
-        `🔄 Patching configuration for segment [${start}-${end}/${proxies.length}]...`
+        `🔄 Patching configuration for segment [${start + 1}-${end}/${proxies.length}]...`
       );
       await updateConfig(stringify({ proxies: segment }));
 
@@ -62,20 +68,25 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
 
       // Exclude unqualified proxies
       for (const proxy of segment) {
-        if (delays[uniqueKey(proxy)] !== undefined) {
+        const key = uniqueKey(proxy);
+        if (delays[key] !== undefined) {
           markProxyAsNotExcluded(proxy, excludedProxies);
+          // Update Map when proxy is no longer excluded
+          excludedMap.delete(key);
           qualifiedProxies.push(proxy);
         } else {
           markProxyAsExcluded(proxy, excludedProxies);
+          // Update Map when proxy is excluded
+          excludedMap.set(key, proxy);
         }
       }
 
       core.info(
-        `✅ Segment [${start}-${end}/${qualifiedProxies.length}:${proxies.length}] health check completed.`
+        `✅ Segment [${start + 1}-${end}/${qualifiedProxies.length}:${proxies.length}] health check completed.`
       );
     } catch (error) {
       core.error(
-        `❌ Failed to health check segment [${start}-${end}]: ${error}`
+        `❌ Failed to health check segment [${start + 1}-${end}]: ${error}`
       );
     }
   }

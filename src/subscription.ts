@@ -13,9 +13,9 @@ export const downloadSubscriptionCollection = async (
     name: nanoid(),
     url,
   }));
-  for (const sub of subs) {
-    await addSub(sub.name, sub.url);
-  }
+  await Promise.all(
+    subs.map((sub) => addSub(sub.name, sub.url))
+  );
   core.info("✅ Subscriptions registered.");
 
   core.info("📦 Registering subscription collection...");
