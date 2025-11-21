@@ -28,6 +28,8 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
     const [start, end] = [i, Math.min(i + segmentSize, proxies.length)];
     const segment = proxies.slice(start, end);
 
+    if (segment.length === 0) continue;
+
     try {
       core.info(
         `🔄 Patching configuration for segment [${start + 1}-${end}/${proxies.length}]...`
