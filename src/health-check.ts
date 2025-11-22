@@ -40,14 +40,16 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
         .filter((proxy: any) => !shouldExcludeProxy(proxy, excludedProxies))
         .map((proxy: any) => {
           return limit(async () => {
-            return {
-              proxy,
-              delay: await healthCheck(
-                proxy.name,
-                inputs["test_url"],
-                inputs["timeout"]
-              ),
-            };
+            const { test_urls, timeout } = inputs;
+            const delays = await Promise.all(
+              test_urls.map(async (url) => {
+                return await healthCheck(proxy.name, url, timeout);
+              })
+            );
+            const valid = delays.filter((delay) => delay > 0);
+            const sum = valid.reduce((acc, cur) => acc + cur, 0);
+            const delay = sum / valid.length / (valid.length / delays.length);
+            return { proxy, delay };
           });
         });
 

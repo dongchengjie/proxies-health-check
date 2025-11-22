@@ -94,7 +94,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
           {
             name: "♻️ 自动选择",
             type: "url-test",
-            url: "https://www.gstatic.com/generate_204",
+            url: "https://google.com/generate_204",
             lazy: true,
             interval: 120,
             timeout: 2000,
@@ -105,7 +105,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
           {
             name: "🚑 故障转移",
             type: "fallback",
-            url: "https://www.gstatic.com/generate_204",
+            url: "https://google.com/generate_204",
             lazy: true,
             interval: 120,
             timeout: 2000,
@@ -116,7 +116,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
             name: "⚖️ 负载均衡",
             type: "load-balance",
             strategy: "round-robin",
-            url: "https://www.gstatic.com/generate_204",
+            url: "https://google.com/generate_204",
             lazy: true,
             interval: 120,
             timeout: 2000,

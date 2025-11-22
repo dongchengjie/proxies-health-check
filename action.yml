@@ -13,10 +13,10 @@ inputs:
     description: Number of concurrent health check requests
     required: false
     default: ""
-  test_url:
-    description: URL used for health check
+  test_urls:
+    description: URLs used for health check
     required: false
-    default: "https://www.google.com/generate_204"
+    default: "https://google.com/generate_204"
   timeout:
     description: Timeout for each health check request in milliseconds
     required: false

@@ -13,7 +13,7 @@ export const updateConfig = (payload: string) => {
 
 export const healthCheck = async (
   proxyName: string,
-  testUrl: string = "https://www.gstatic.com/generate_204",
+  testUrl: string = "https://google.com/generate_204",
   timeout: number = 5000
 ): Promise<number> => {
   const url = `http://127.0.0.1:${EXTERNAL_CONTROLLER_PORT}/proxies/${encodeURIComponent(

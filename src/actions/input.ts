@@ -9,7 +9,9 @@ export const inputs = {
   concurrency: Number(
     core.getInput("concurrency") || os.availableParallelism()
   ),
-  test_url: core.getInput("test_url") || "https://www.google.com/generate_204",
+  test_urls: core.getMultilineInput("test_urls") || [
+    "https://google.com/generate_204",
+  ],
   timeout: Number(core.getInput("timeout") || "1500"),
   excluded_proxies_config_urls: core.getMultilineInput(
     "excluded_proxies_config_urls"
