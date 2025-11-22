@@ -66,7 +66,9 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
 
       // Exclude unqualified proxies
       for (const proxy of segment) {
-        if (delays[uniqueKey(proxy)] !== undefined) {
+        const delayResult = delays[uniqueKey(proxy)];
+        if (delayResult !== undefined) {
+          proxy._delay = delayResult.delay;
           markProxyAsNotExcluded(proxy, excludedProxies);
           qualifiedProxies.push(proxy);
         } else {
@@ -86,6 +88,13 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
     }
   }
   core.info("✅ Health checks completed.");
+
+  // Sort qualified proxies by delay
+  qualifiedProxies
+    .sort((a, b) => a._delay - b._delay)
+    .forEach((proxy) => {
+      delete proxy._delay;
+    });
 
   return { qualifiedProxies, excludedProxies };
 };
