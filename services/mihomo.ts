@@ -67,7 +67,7 @@ rules:
       "./services/mihomo",
       ["-config", config, "-d", "./services"],
       {
-        stdio: "inherit",
+        stdio: process.env.NODE_ENV === "dev" ? "inherit" : "ignore",
         cwd: process.cwd(),
         detached: true,
       }

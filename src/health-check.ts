@@ -22,6 +22,10 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
   excludedProxies.push(...(await getExcludedProxies()));
   core.info(`✅ Parsed ${excludedProxies.length} excluded proxies.`);
 
+  // Filter out excluded proxies
+  proxies = proxies.filter((p) => !shouldExcludeProxy(p, excludedProxies));
+  core.info(`🔍 Starting health checks for ${proxies.length} proxies...`);
+
   const segmentSize = inputs["segment_size"];
   for (let i = 0; i < proxies.length; i += segmentSize) {
     const limit = pLimit(inputs["concurrency"]);

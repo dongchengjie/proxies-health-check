@@ -14,7 +14,7 @@ const startSubStoreBackend = (): Promise<void> => {
     console.log("🚀 Starting Sub-Store backend...");
 
     mainProcess = spawn("bun", ["run", "./services/sub-store.js"], {
-      stdio: "inherit",
+      stdio: process.env.NODE_ENV === "dev" ? "inherit" : "ignore",
       cwd: process.cwd(),
       detached: true,
     });
