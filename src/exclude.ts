@@ -4,7 +4,7 @@ import { downloadSubscriptionCollection } from "./subscription";
 
 const EXCLUDED_TIMES_KEY = "_excluded_times";
 
-export const simplifyExcludedProxy = (proxy: any) => {
+const simplify = (proxy: any) => {
   return {
     type: proxy.type,
     server: proxy.server,
@@ -20,7 +20,7 @@ export const getExcludedProxies = async () => {
 
     const excludedProxies = await downloadSubscriptionCollection(urls, "JSON");
     return excludedProxies.map((proxy: any) => ({
-      ...simplifyExcludedProxy(proxy),
+      ...simplify(proxy),
       [EXCLUDED_TIMES_KEY]: proxy[EXCLUDED_TIMES_KEY] ?? 1,
     }));
   } catch {
@@ -29,32 +29,33 @@ export const getExcludedProxies = async () => {
 };
 
 export const shouldExcludeProxy = (proxy: any, excluded: any[] = []) => {
-  const times = inputs["max_excluded_times"];
-  if (proxy[EXCLUDED_TIMES_KEY] && proxy[EXCLUDED_TIMES_KEY] >= times) {
-    return true;
-  }
-
+  const key = uniqueKey(proxy);
+  const maxExcludedTimes = inputs["max_excluded_times"];
   return excluded.find(
     (item) =>
-      uniqueKey(item) === uniqueKey(proxy) && item[EXCLUDED_TIMES_KEY] >= times
+      uniqueKey(item) === key && item[EXCLUDED_TIMES_KEY] >= maxExcludedTimes
   )
     ? true
     : false;
 };
 
 export const markProxyAsNotExcluded = (proxy: any, excluded: any[] = []) => {
-  const idx = excluded.findIndex(
-    (item) => uniqueKey(item) === uniqueKey(proxy)
-  );
+  const key = uniqueKey(proxy);
+  const idx = excluded.findIndex((item) => uniqueKey(item) === key);
   if (idx !== -1) {
     excluded.splice(idx, 1);
   }
-  delete proxy[EXCLUDED_TIMES_KEY];
 };
 
 export const markProxyAsExcluded = (proxy: any, excluded: any[] = []) => {
-  if (!excluded.find((item) => uniqueKey(item) === uniqueKey(proxy))) {
-    excluded.push(proxy);
+  const key = uniqueKey(proxy);
+  const result = excluded.find((item) => uniqueKey(item) === key);
+  if (result) {
+    result[EXCLUDED_TIMES_KEY] = (result[EXCLUDED_TIMES_KEY] || 0) + 1;
+  } else {
+    excluded.push({
+      ...simplify(proxy),
+      [EXCLUDED_TIMES_KEY]: proxy[EXCLUDED_TIMES_KEY] ?? 1,
+    });
   }
-  proxy[EXCLUDED_TIMES_KEY] = (proxy[EXCLUDED_TIMES_KEY] ?? 0) + 1;
 };

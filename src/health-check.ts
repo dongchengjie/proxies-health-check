@@ -96,5 +96,12 @@ export const proxiesHealthCheck = async (proxies: any[]) => {
       delete proxy._delay;
     });
 
+  // Sort excluded proxies by unique key
+  excludedProxies.sort((a, b) => {
+    const keyA = uniqueKey(a);
+    const keyB = uniqueKey(b);
+    return keyA.localeCompare(keyB);
+  });
+
   return { qualifiedProxies, excludedProxies };
 };

@@ -3,7 +3,6 @@ import path from "path";
 import { stringify } from "yaml";
 import core from "@actions/core";
 import fs from "fs-extra";
-import { simplifyExcludedProxy } from "./exclude";
 
 const workspace = process.env["GITHUB_WORKSPACE"] ? "/github/workspace" : "";
 
@@ -178,8 +177,6 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
 
 export const outputExcludedProxies = (excludedProxies: any[]) => {
   if (excludedProxies.length > 0) {
-    excludedProxies = excludedProxies.map(simplifyExcludedProxy);
-
     const excludedFile = path.resolve(workspace, inputs["excluded"]);
     fs.outputFileSync(excludedFile, stringify({ proxies: excludedProxies }));
     core.info(`✅ Output ${excludedProxies.length} excluded proxies.`);
