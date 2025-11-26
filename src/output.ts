@@ -7,6 +7,17 @@ import fs from "fs-extra";
 const workspace = process.env["GITHUB_WORKSPACE"] ? "/github/workspace" : "";
 
 export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
+  // Add suffix to duplicate proxy names
+  const nameCountMap = new Map<string, number>();
+  qualifiedProxies = qualifiedProxies.map((proxy) => {
+    const count = nameCountMap.get(proxy.name) || 0;
+    nameCountMap.set(proxy.name, count + 1);
+    if (count >= 1) {
+      return { ...proxy, name: `${proxy.name}-${count}` };
+    }
+    return proxy;
+  });
+
   if (qualifiedProxies.length > 0) {
     const qualifiedFile = path.resolve(workspace, inputs["qualified"]);
     fs.outputFileSync(
@@ -82,6 +93,15 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
               "https://194.242.2.3/dns-query",
             ],
           },
+        },
+        sniffer: {
+          enable: true,
+          sniff: {
+            HTTP: { ports: [80, "8080-8880"], "override-destination": true },
+            TLS: { ports: [443, 8443] },
+            QUIC: { ports: [443, 8443] },
+          },
+          "skip-domain": ["Mijia Cloud", "+.push.apple.com"],
         },
         "proxy-groups": [
           {
