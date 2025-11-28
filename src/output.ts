@@ -18,6 +18,8 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
     return proxy;
   });
 
+  const proxyNames = qualifiedProxies.map((proxy) => proxy.name);
+
   if (qualifiedProxies.length > 0) {
     const qualifiedFile = path.resolve(workspace, inputs["qualified"]);
     fs.outputFileSync(
@@ -107,8 +109,13 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
           {
             name: "🚀 节点选择",
             type: "select",
-            proxies: ["♻️ 自动选择", "🚑 故障转移", "⚖️ 负载均衡", "DIRECT"],
-            "include-all-proxies": true,
+            proxies: [
+              "♻️ 自动选择",
+              "🚑 故障转移",
+              "⚖️ 负载均衡",
+              "DIRECT",
+              ...proxyNames,
+            ],
           },
           {
             name: "♻️ 自动选择",
@@ -119,7 +126,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
             timeout: 2000,
             tolerance: 100,
             "max-failed-times": 3,
-            "include-all-proxies": true,
+            proxies: [...proxyNames],
           },
           {
             name: "🚑 故障转移",
@@ -129,7 +136,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
             interval: 120,
             timeout: 2000,
             "max-failed-times": 3,
-            "include-all-proxies": true,
+            proxies: [...proxyNames],
           },
           {
             name: "⚖️ 负载均衡",
@@ -140,7 +147,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
             interval: 120,
             timeout: 2000,
             "max-failed-times": 3,
-            "include-all-proxies": true,
+            proxies: [...proxyNames],
           },
           {
             name: "🎯 全球直连",
@@ -162,8 +169,8 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
               "🚑 故障转移",
               "⚖️ 负载均衡",
               "DIRECT",
+              ...proxyNames,
             ],
-            "include-all-proxies": true,
           },
         ],
         proxies: qualifiedProxies,
