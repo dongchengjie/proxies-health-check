@@ -1,0 +1,43 @@
+# Use the official Bun image
+FROM oven/bun:1.3 AS base
+WORKDIR /usr/src/app
+
+FROM base AS install
+# Install dependencies
+RUN mkdir -p /temp/bun
+COPY package.json bun.lockb /temp/bun/
+RUN cd /temp/bun && bun install --frozen-lockfile
+# Install Sub-Store backend
+ADD https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store.bundle.js sub-store.js
+# Install Mihomo
+ADD https://github.com/MetaCubeX/mihomo/releases/download/v1.19.24/mihomo-linux-amd64-compatible-v1.19.24.gz mihomo.gz
+RUN gunzip mihomo.gz && chmod +x mihomo
+# Install GEOX
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat GeoIP.dat
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb Country.mmdb
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb ASN.mmdb
+ADD https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat GeoSite.dat
+
+FROM base AS action
+COPY --from=install /temp/bun/node_modules node_modules
+COPY --from=install /usr/src/app/sub-store.js services/sub-store.js
+COPY --from=install /usr/src/app/mihomo services/mihomo
+COPY --from=install /usr/src/app/GeoIP.dat services/GeoIP.dat
+COPY --from=install /usr/src/app/Country.mmdb services/Country.mmdb
+COPY --from=install /usr/src/app/ASN.mmdb services/ASN.mmdb
+COPY --from=install /usr/src/app/GeoSite.dat services/GeoSite.dat
+COPY . .
+
+# Set environment variables
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+ENV SUB_STORE_BACKEND_API_PORT=3000
+ENV SUB_STORE_BODY_JSON_LIMIT=50mb
+ENV EXTERNAL_CONTROLLER_PORT=9090
+
+# Expose ports (Dev Only)
+EXPOSE 3000
+EXPOSE 9090
+
+# Run the app
+RUN chmod +x docker-entrypoint.sh
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]

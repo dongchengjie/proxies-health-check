@@ -1,0 +1,26 @@
+name: dev
+
+on:
+  workflow_dispatch:
+
+permissions: write-all
+
+concurrency:
+  group: dev
+  cancel-in-progress: true
+
+jobs:
+  proxies-health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: dongchengjie/proxies-health-check@main
+        with:
+          proxies_config_urls: |
+            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/Pawdroid.yaml
+            https://raw.githubusercontent.com/dongchengjie/airport/main/subs/SFZY666.yaml
+
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "ci: dev"
