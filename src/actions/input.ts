@@ -25,6 +25,7 @@ export const inputs = {
     .flat()
     .map((keyword: string) => keyword.trim())
     .filter(str => str.length > 0),
+  split_by_protocol: Boolean(core.getInput("split_by_protocol") || "false"),
   qualified: core.getInput("qualified") || "qualified.yaml",
   excluded: core.getInput("excluded") || "excluded.yaml"
 } as const;

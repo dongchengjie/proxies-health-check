@@ -49,16 +49,33 @@ const sortQualifiedProxies = (qualifiedProxies: any[]) => {
 };
 
 export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
-  if (!Array.isArray(qualifiedProxies) || qualifiedProxies.length === 0) {
-    core.warning("⚠️ No qualified proxies found.");
-    return;
+  // Output qualified proxies to YAML file
+  const qualifiedFile = path.resolve(workspace, inputs["qualified"]);
+  outputProxies(qualifiedProxies, qualifiedFile);
+  core.info(`✅ Output ${qualifiedProxies.length} qualified proxies.`);
+
+  // If split_by_protocol is enabled, also output proxies grouped by protocol
+  if (inputs["split_by_protocol"]) {
+    const protocols = qualifiedProxies.reduce((acc: Record<string, any[]>, proxy) => {
+      if (typeof proxy.type === "string") (acc[proxy.type] ??= []).push(proxy);
+      return acc;
+    }, {});
+    for (const [protocol, proxies] of Object.entries(protocols)) {
+      const { dir, name, ext } = path.parse(qualifiedFile);
+      const outputFile = path.resolve(dir, `${name}_${protocol}${ext}`);
+      outputProxies(proxies, outputFile);
+      core.info(`✅ Output ${proxies.length} qualified ${protocol} proxies.`);
+    }
   }
+};
+
+const outputProxies = (proxies: any[], outputFile: string) => {
+  if (!Array.isArray(proxies) || proxies.length === 0) return;
 
   // Sort proxies by priority keywords and types
-  qualifiedProxies = sortQualifiedProxies(qualifiedProxies);
+  proxies = sortQualifiedProxies(proxies);
 
-  const proxyNames = qualifiedProxies.map(proxy => proxy.name);
-  const qualifiedFile = path.resolve(workspace, inputs["qualified"]);
+  const proxyNames = proxies.map(proxy => proxy.name);
   const yaml = stringify({
     "mixed-port": 7890,
     ipv6: true,
@@ -145,7 +162,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
         proxies: ["🚀 节点选择", "♻️ 自动选择", "🚑 故障转移", "DIRECT"]
       }
     ],
-    proxies: qualifiedProxies,
+    proxies,
     rules: [
       "GEOIP,lan,🎯 全局直连,no-resolve",
       "GEOSITE,github,🚀 节点选择",
@@ -171,8 +188,7 @@ export const outputQualifiedProxies = (qualifiedProxies: any[]) => {
   // Remove escape characters from the YAML string
   const cleanedYaml = yaml.replace(/\\u[\da-fA-F]{4}|\\x[\da-fA-F]{2}/g, "");
 
-  fs.outputFileSync(qualifiedFile, cleanedYaml);
-  core.info(`✅ Output ${qualifiedProxies.length} qualified proxies.`);
+  fs.outputFileSync(outputFile, cleanedYaml);
 };
 
 export const outputExcludedProxies = (excludedProxies: any[]) => {

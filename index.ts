@@ -20,9 +20,7 @@ const healthCheckResult = await proxiesHealthCheck(proxies);
 let { qualifiedProxies, excludedProxies } = healthCheckResult;
 
 // Normalize proxy names
-qualifiedProxies = inputs["normalize"]
-  ? normalize(qualifiedProxies)
-  : qualifiedProxies;
+qualifiedProxies = inputs["normalize"] ? normalize(qualifiedProxies) : qualifiedProxies;
 
 // Output results
 outputQualifiedProxies(qualifiedProxies);

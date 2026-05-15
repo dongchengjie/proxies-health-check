@@ -43,6 +43,9 @@ inputs:
   priority_types:
     description: Priority types for sorting proxies
     required: false
+  split_by_protocol:
+    description: Split proxies by protocol
+    required: false
   qualified:
     description: Output file path for qualified proxies
     required: false

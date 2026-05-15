@@ -30,5 +30,6 @@ jobs:
 | normalize                    | Normalize proxy names                                                                | false                                   |
 | priority_keywords            | Priority keywords for sorting proxies                                                |                                         |
 | priority_types               | Priority types for sorting proxies                                                   |                                         |
+| split_by_protocol            | Split proxies by protocol                                                            | false                                   |
 | qualified                    | Output file path for qualified proxies                                               | $pwd/qualified.yaml                     |
 | excluded                     | Output file path for excluded proxies                                                | $pwd/excluded.yaml                      |
