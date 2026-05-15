@@ -86,6 +86,7 @@ export const addCollection = (collection: string, subscriptions: string[]) => {
               "vless",
               "vmess",
               "trojan",
+              "http",
               "snell",
               "socks5",
               "tuic",
